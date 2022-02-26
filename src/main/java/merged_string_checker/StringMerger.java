@@ -1,43 +1,53 @@
 package merged_string_checker;
 
-import java.util.Stack;
-
 public class StringMerger {
 
     public static boolean isMerge(String s, String part1, String part2) {
-
         if (s.length() != part1.length() + part2.length()) {
             return false;
         }
-        boolean flag1 = true;
-        boolean flag2 = true;
-        Stack<Character> stack1 = new Stack<>();
-        Stack<Character> stack2 = new Stack<>();
+        StringBuilder t = new StringBuilder(s);
+        StringBuilder sb1 = new StringBuilder(part1);
+        StringBuilder sb2 = new StringBuilder(part2);
+        while (t.length() > 0) {
+            int len1 = 0;
+            int len2 = 0;
 
-        for (int i = part1.length() - 1; i >= 0; i--) {
-            stack1.push(part1.charAt(i));
-        }
-        for (int i = part2.length() - 1; i >= 0; i--) {
-            stack2.push(part2.charAt(i));
-        }
+            for (int i = 0; i < sb1.length(); i++) {
 
-
-        for (int i = 0; i < s.length(); i++) {
-            if (!stack1.isEmpty() && stack1.peek() == s.charAt(i)) {
-                stack1.pop();
-            } else if (!stack2.isEmpty() && stack2.peek() == s.charAt(i)) {
-                stack2.pop();
-            } else {
-                if (!stack1.isEmpty()&&!stack2.isEmpty()){
-                    return false;
+                if (t.charAt(i) == sb1.charAt(i)) {
+                    len1++;
+                } else {
+                    break;
                 }
             }
+            for (int i = 0; i < sb2.length(); i++) {
+
+                if (t.charAt(i) == sb2.charAt(i)) {
+                    len2++;
+                } else {
+                    break;
+                }
+            }
+            if (len1 == 0 && len2 == 0) {
+                return false;
+            }
+            if (len1 > len2) {
+                sb1.delete(0, 1);
+                t.delete(0, 1);
+
+            } else {
+                sb2.delete(0, 1);
+                t.delete(0, 1);
+            }
+
         }
-        if (stack1.isEmpty()&&stack2.isEmpty()){
+        if (t.length() == 0 && sb1.length() == 0 && sb2.length() == 0) {
             return true;
-        }else{
+        } else {
             return false;
         }
+
     }
 
 }
