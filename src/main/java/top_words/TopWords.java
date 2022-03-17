@@ -11,33 +11,37 @@ public class TopWords {
         Map<String, Integer> result = new HashMap<>();
         List<String> resultList = new ArrayList<>();
 
-
         List<String> strings = Arrays.stream(s
                         .toLowerCase(Locale.ROOT)
-                        .replaceAll("[^a-z' ]", "")
+                        .replaceAll("[^a-z' ]", " ")
                         .trim()
                         .split(" ")).collect(Collectors.toList());
 
+//        System.out.println(strings);
 
         for (String string : strings) {
-
-            if (Pattern.matches("[']?[a-z]+[']?[a-z][']?|[a-z]", string)) {
+            if (Pattern.matches("[']?[a-z]+[']?[a-z]+[']?|[a-z]", string)) {
                 if (result.containsKey(string)) {
                     result.replace(string, result.get(string), result.get(string) + 1);
                 } else {
                     result.put(string, 1);
                 }
             }
+
         }
+
         List<Map.Entry<String, Integer>> collect = result.entrySet().stream()
                 .sorted(Comparator.comparingInt(Map.Entry::getValue))
                 .toList();
 
+//        System.out.println(collect);
         for (int i = collect.size() - 1; i >= 0; i--) {
             if (i > collect.size() - 4) {
+//                System.out.println(collect.get(i).getKey()+"   "+collect.get(i).getValue());
                 resultList.add(collect.get(i).getKey());
             }
         }
+
         return resultList;
     }
 }
